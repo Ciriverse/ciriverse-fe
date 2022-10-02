@@ -57,19 +57,6 @@ export default function Navigation() {
           network: "evm",
         };
         console.log(userData);
-        // making a post request to our 'request-message' endpoint
-        const { data } = await axios.post(
-          "/api/auth/request-message",
-          userData,
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-          }
-        );
-        const message = data.message;
-
-        console.log(message);
       };
       connectToMoralis();
     }

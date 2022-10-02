@@ -375,10 +375,12 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 
 .dashboard {
   background: linear-gradient(90.21deg, #aa367c -5.91%, #4a2fbd 111.58%);
+
   /* padding: 60px 0 200px 0; */
   margin-top: 0;
   padding: 200px 0 100px 0;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
 }
 .dashboard img {
   width: 92%;
@@ -449,6 +451,90 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   transition: 0.3s ease-in-out;
 } */
 .dashboard form button:hover::before {
+  width: 100%;
+  color: #fff;
+}
+
+/************ Notif Css ************/
+
+.notif {
+  background: linear-gradient(90.21deg, #aa367c -5.91%, #4a2fbd 111.58%);
+
+  /* padding: 60px 0 200px 0; */
+  margin-top: 0;
+  padding: 0 0 0 0;
+  min-height: 100vh;
+  /* overflow: auto; */
+}
+.notif img {
+  width: 92%;
+}
+.notif h2 {
+  font-size: 45px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.notif form input,
+.notif form textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  color: #fff;
+  margin: 0 0 8px 0;
+  padding: 18px 26px;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.8px;
+  transition: 0.3s ease-in-out;
+}
+.notif form input:focus,
+.notif form textarea:focus {
+  background: rgba(255, 255, 255, 1);
+  color: #121212;
+}
+.notif form input::placeholder,
+.notif form textarea::placeholder {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+}
+.notif form input:focus::placeholder,
+.notif form textarea:focus::placeholder {
+  color: #121212;
+  opacity: 0.8;
+}
+.notif form button {
+  font-weight: 700;
+  color: #000;
+  background-color: #fff;
+  padding: 14px 48px;
+  font-size: 18px;
+  margin-top: 25px;
+  border-radius: 0;
+  position: relative;
+  transition: 0.3s ease-in-out;
+}
+.notif form button span {
+  z-index: 1;
+  position: relative;
+}
+.notif form button:hover {
+  color: #000;
+}
+/* .login form button::before {
+  content: "";
+  background-color: #121212;
+  background: #fff;
+  width: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  transition: 0.3s ease-in-out;
+} */
+.notif form button:hover::before {
   width: 100%;
   color: #fff;
 }
@@ -732,4 +818,67 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   color: #b8b8b8;
   letter-spacing: 0.5px;
   margin-top: 20px;
+}
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/************ Signup Pic Css ************/
+
+.signup-profile-pic__container {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.signup-profile-pic {
+  width: 300px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  height: 300px;
+}
+
+.add-picture-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 30px;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+  z-index: 99;
 }
