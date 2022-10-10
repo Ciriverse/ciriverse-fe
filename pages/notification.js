@@ -1,6 +1,6 @@
 import { Container, Row, Col, ListGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import io from "Socket.io-client";
+import io from "socket.io-client";
 import useSound from "use-sound";
 let socket;
 import { useRouter } from "next/router";

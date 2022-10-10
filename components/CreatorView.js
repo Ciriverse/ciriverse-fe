@@ -8,7 +8,7 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import io from "Socket.io-client";
+import io from "socket.io-client";
 
 import "animate.css";
 

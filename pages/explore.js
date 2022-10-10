@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Mint from "../components/Mint";
 import Overview from "../components/Overview";
 
-import io from "Socket.io-client";
+import io from "socket.io-client";
 import Users from "../components/users";
 import Head from "next/head";
 import { chain } from "wagmi";
@@ -22,7 +22,6 @@ export default function Explore() {
   const [data, setData] = useState([]);
   const [currentPage, setPage] = useState("Overview");
   const [creatorStatus, setCreator] = useState(false);
-  // let socket = io("http://localhost:5001");
 
   const { runContractFunction: seeRegister } = useWeb3Contract({
     abi: milestoneAbi,
