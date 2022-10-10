@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { utils } from "ethers";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
-let socket = io("http://localhost:5001");
+let socket = io("https://superb-malabi-e243b8.netlify.app");
 
 export default function CollectibleView() {
   const router = useRouter();

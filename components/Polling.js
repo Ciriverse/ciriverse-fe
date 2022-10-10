@@ -20,8 +20,8 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import { utils } from "ethers";
 import Loader from "./Loader";
 
-const projectId = "2FAORjlGKnlM2unSmMNIsLKGnjX";
-const projectSecret = "7dfd99f8cf8a0583c9830a141c2bed1c";
+const projectId = process.env.NEXT_PUBLIC_IPFS_PROJECT_ID;
+const projectSecret = process.env.NEXT_PUBLIC_IPFS_PROJECT_SECRET;
 const authorization = "Basic " + btoa(projectId + ":" + projectSecret);
 
 const client = ipfsHttpClient({

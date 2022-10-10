@@ -8,7 +8,6 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import io from "Socket.io-client";
 
 import "animate.css";
 
@@ -22,7 +21,6 @@ import { useEffect, useState } from "react";
 import { utils } from "ethers";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
-let socket = io("http://localhost:5001");
 
 export default function PollingView() {
   const router = useRouter();
@@ -155,50 +153,6 @@ export default function PollingView() {
     }
   }
 
-  function sendSocketNFT(message) {
-    socket.emit("sending-nft", `${addr}`, message);
-  }
-
-  async function voteProposal(collectibleId, price) {
-    // create the items and list them on the marketplace
-
-    setIsVoting(true);
-
-    // we want to create the token
-    try {
-      // transaction = await contract.makeMarketItem(nftaddress, tokenId, price, {value: listingPrice})
-      // await transaction.wait()
-      //   price = utils.parseEther(price).toString();
-
-      runContractFunction({
-        params: {
-          abi: collectibleAbi,
-          contractAddress: collectibleAddress,
-          functionName: "mintToken",
-          msgValue: price,
-          params: { creator: addr, index: collectibleId },
-        },
-        onError: (error) => {},
-        onSuccess: async (success) => {
-          await success.wait(1);
-          setIsVoting(false);
-          sendSocketNFT(
-            `Congrats !. ${account} Mint Collectible NFT: ${collectibleId + 1}`
-          );
-          updateCollectibles();
-          //   updateUI();
-        },
-      });
-
-      // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-    } catch {
-      // console.error("Too long waited to mint, go to main page");
-
-      setIsVoting(false);
-    }
-
-    // list the item for sale on the marketplace
-  }
   return (
     <Row className="text-center">
       <Col

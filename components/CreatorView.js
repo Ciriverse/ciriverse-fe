@@ -22,7 +22,7 @@ import Loader from "./Loader";
 import { useRouter } from "next/router";
 import CollectibleView from "./CollectibleView";
 import PollingView from "./PollingView";
-let socket = io("http://localhost:5001");
+let socket = io("https://superb-malabi-e243b8.netlify.app");
 
 export default function CreatorView({ address }) {
   const router = useRouter();
