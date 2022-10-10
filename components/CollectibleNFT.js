@@ -195,9 +195,10 @@ export default function CollectibleNFT() {
                   <Loader />
                 </div>
               ) : collectibles.length > 0 ? (
-                collectibles.map((tokenURIResponse) => {
+                collectibles.map((tokenURIResponse, i) => {
                   return (
                     <Card
+                      key={i}
                       className="m-3 justify-content-center shadow-lg"
                       style={{ width: "18rem" }}
                     >

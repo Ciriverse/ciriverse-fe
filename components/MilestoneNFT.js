@@ -193,9 +193,10 @@ export default function MilestoneNFT() {
                   <Loader />
                 </div>
               ) : milestones.length > 0 ? (
-                milestones.map((tokenURIResponse) => {
+                milestones.map((tokenURIResponse, i) => {
                   return (
                     <Card
+                      key={i}
                       className="m-3 justify-content-center shadow-lg"
                       style={{ width: "18rem" }}
                     >
