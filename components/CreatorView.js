@@ -20,6 +20,8 @@ import { useEffect, useState } from "react";
 import { utils } from "ethers";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
+import CollectibleView from "./CollectibleView";
+import PollingView from "./PollingView";
 let socket = io("http://localhost:5001");
 
 export default function CreatorView({ address }) {
@@ -49,8 +51,6 @@ export default function CreatorView({ address }) {
     //   { id: 'Chiq', text: 'Chiq' },
     // ]
   });
-
-  console.log(router.query);
 
   const milestoneAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const { runContractFunction: getFunds } = useWeb3Contract({
@@ -109,12 +109,8 @@ export default function CreatorView({ address }) {
   }
 
   async function updateFunds() {
-    console.log("ada ga address nya?");
-    console.log(addr);
-
     let fundsData = await getFunds();
-    console.log("get funds");
-    console.log(fundsData);
+
     fundsData = utils.formatUnits(fundsData, "ether");
 
     setFunds(fundsData);
@@ -122,8 +118,7 @@ export default function CreatorView({ address }) {
 
   async function updateCreator() {
     let creatorData = await getCreator();
-    console.log("creator data");
-    console.log(creatorData);
+
     setCreator(creatorData);
   }
 
@@ -135,16 +130,14 @@ export default function CreatorView({ address }) {
 
   async function updateMilestones() {
     let milestonesData = await getMilestones();
-    console.log("get milesones");
 
     let dataAfter = [];
 
     await Promise.all(
       milestonesData.map(async (data, index) => {
         let tokenURIResponse = await (await fetch(data)).json();
-        console.log("nge fetch ga sih");
+
         // tokenURIResponse.push({ tokenId: index });
-        console.log(tokenURIResponse);
 
         let isEligible = await runContractFunction({
           params: {
@@ -157,7 +150,7 @@ export default function CreatorView({ address }) {
               milestoneId: index,
             },
           },
-          onError: (error) => console.log(error),
+          onError: (error) => {},
           onSuccess: async (success) => {},
         });
 
@@ -171,7 +164,7 @@ export default function CreatorView({ address }) {
               milestoneId: index,
             },
           },
-          onError: (error) => console.log(error),
+          onError: (error) => {},
           onSuccess: async (success) => {},
         });
 
@@ -185,7 +178,7 @@ export default function CreatorView({ address }) {
               id: tokenId,
             },
           },
-          onError: (error) => console.log(error),
+          onError: (error) => {},
           onSuccess: async (success) => {},
         });
 
@@ -197,8 +190,6 @@ export default function CreatorView({ address }) {
         });
       })
     );
-
-    console.log(dataAfter);
 
     setMilestones(dataAfter);
   }
@@ -229,13 +220,10 @@ export default function CreatorView({ address }) {
     if (!price) return;
 
     setIsDonating(true);
-    // console.log(utils.parseEther(formInput.price).toString());
-    console.log(utils.parseEther(price).toString());
+
     // let parsedEther = utils.formatUnits(price, "wei");
     // setDonateFund(utils.parseEther(price).toString());
     valueToSend = utils.parseEther(price).toString();
-
-    console.log(`fundtodonate ${valueToSend}`);
 
     await runContractFunction({
       params: {
@@ -247,11 +235,11 @@ export default function CreatorView({ address }) {
           creator: addr,
         },
       },
-      onError: (error) => console.log(error),
+      onError: (error) => {},
       onSuccess: async (success) => {
-        console.log(success);
         await success.wait(1);
-        sendSocket(`${account} donate : ${price} KLAY \n ${message}`);
+        sendSocket(`${account} donate : ${price} KLAY. Message : ${message}`);
+        updateMilestones();
       },
       onComplete: (success) => {},
     });
@@ -271,7 +259,7 @@ export default function CreatorView({ address }) {
     // create the items and list them on the marketplace
 
     setIsMinting(true);
-    console.log("try to mint");
+
     // we want to create the token
     try {
       // transaction = await contract.makeMarketItem(nftaddress, tokenId, price, {value: listingPrice})
@@ -282,17 +270,16 @@ export default function CreatorView({ address }) {
           abi: milestoneAbi,
           contractAddress: milestoneAddress,
           functionName: "mintDonatorNFT",
-          params: { artist: addr, milestoneId: mlsId },
+          params: { creator: addr, milestoneId: mlsId },
         },
-        onError: (error) => console.log(error),
+        onError: (error) => {},
         onSuccess: async (success) => {
-          console.log(success);
           await success.wait(1);
-          updateMilestones();
           setIsMinting(false);
           sendSocketNFT(
             `Congrats !. ${account} Mint Milestone NFT: ${mlsId + 1}`
           );
+          updateMilestones();
           //   updateUI();
         },
       });
@@ -474,6 +461,8 @@ export default function CreatorView({ address }) {
                   </Row>
                 </Col>
               </Row>
+              <CollectibleView />
+              <PollingView />
             </>
           )
         )}

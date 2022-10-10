@@ -47,8 +47,7 @@ export default function Users() {
   async function updateFunds() {
     let fundsData = await getFunds();
     fundsData = utils.formatUnits(fundsData, "ether");
-    console.log("get funds");
-    console.log(fundsData);
+
     setFunds(fundsData);
   }
 
@@ -61,20 +60,6 @@ export default function Users() {
   async function updateMilestones() {
     setIsFetching(true);
     let creatorsData = await getCreators();
-    console.log("creatorsData");
-    console.log(creatorsData);
-
-    // let dataAfter = [];
-
-    // await Promise.all(
-    //     creatorsData.map(async (data) => {
-    //     console.log("nge fetch ga sih");
-    //     console.log(tokenURIResponse);
-    //     dataAfter.push(tokenURIResponse);
-    //   })
-    // );
-
-    // console.log(dataAfter);
 
     setMilestones(creatorsData);
     setIsFetching(false);

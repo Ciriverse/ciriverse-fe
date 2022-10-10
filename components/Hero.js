@@ -90,9 +90,9 @@ export default function Hero() {
                       such as Engagement NFTs, Content Goals and NFTs Community
                       gating.
                     </p>
-                    <button onClick={() => console.log("connect")}>
+                    {/* <button onClick={() => console.log("connect")}>
                       Let’s Connect <ArrowRightCircle size={25} />
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </TrackVisibility>

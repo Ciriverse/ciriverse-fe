@@ -14,6 +14,7 @@ import TrackVisibility from "react-on-screen";
 import { useState, useEffect } from "react";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import milestoneAbi from "../constants/MilestoneNFTv2.json";
+import collectibleAbi from "../constants/CollectibleNFT.json";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { utils } from "ethers";
 import Loader from "./Loader";
@@ -29,7 +30,7 @@ const client = ipfsHttpClient({
   },
 });
 
-export default function MilestoneNFT() {
+export default function CollectibleNFT() {
   const [showModal, setShowModal] = useState(false);
 
   const { chainId, account, isWeb3Enabled } = useMoralis();
@@ -42,7 +43,7 @@ export default function MilestoneNFT() {
   const [fileUrl, setFileUrl] = useState(null);
   const [isUploading, setUploading] = useState(false);
   const [onSale, setOnSale] = useState(false);
-  const [milestones, setMilestones] = useState([]);
+  const [collectibles, setCollectibles] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [formInput, updateFormInput] = useState({
     price: "",
@@ -55,12 +56,14 @@ export default function MilestoneNFT() {
   });
 
   const milestoneAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+  const collectibleAddress =
+    process.env.NEXT_PUBLIC_COLLECTIBLE_CONTRACT_ADDRESS;
   const { runContractFunction } = useWeb3Contract();
 
-  const { runContractFunction: getMilestones } = useWeb3Contract({
-    abi: milestoneAbi,
-    contractAddress: milestoneAddress,
-    functionName: "getMilestones",
+  const { runContractFunction: getCollectibles } = useWeb3Contract({
+    abi: collectibleAbi,
+    contractAddress: collectibleAddress,
+    functionName: "getCollectibles",
     params: {
       creator: account,
     },
@@ -80,27 +83,27 @@ export default function MilestoneNFT() {
     }
   }
 
-  async function updateMilestones() {
+  async function updateCollectibles() {
     setIsFetching(true);
-    let milestonesData = await getMilestones();
+    let collectiblesData = await getCollectibles();
 
     let dataAfter = [];
 
     await Promise.all(
-      milestonesData.map(async (data) => {
-        const tokenURIResponse = await (await fetch(data)).json();
+      collectiblesData.map(async (data) => {
+        const tokenURIResponse = await (await fetch(data.URI)).json();
 
         dataAfter.push(tokenURIResponse);
       })
     );
 
-    setMilestones(dataAfter);
+    setCollectibles(dataAfter);
     setIsFetching(false);
   }
 
   useEffect(() => {
     if (isWeb3Enabled) {
-      updateMilestones();
+      updateCollectibles();
     }
   }, [isWeb3Enabled, account]);
 
@@ -118,7 +121,7 @@ export default function MilestoneNFT() {
     setUploading(false);
   }
 
-  async function createMilestone() {
+  async function createCollectibles() {
     const { name, description, price } = formInput;
 
     if (!name || !description || !price || !fileUrl) return;
@@ -134,12 +137,11 @@ export default function MilestoneNFT() {
       const added = await client.add(data);
       const url = `https://ipfs.io/ipfs/${added.path}`;
 
-      // run a function that creates sale and passes in the url
-      mintMilestone(url, price);
+      mintCollectible(url, price);
     } catch (error) {}
   }
 
-  async function mintMilestone(url, price) {
+  async function mintCollectible(url, price) {
     // create the items and list them on the marketplace
 
     setIsMinting(true);
@@ -151,15 +153,15 @@ export default function MilestoneNFT() {
 
       runContractFunction({
         params: {
-          abi: milestoneAbi,
-          contractAddress: milestoneAddress,
-          functionName: "mintCreatorNFT",
-          params: { _tokenURI: url, _price: utils.parseEther(price) },
+          abi: collectibleAbi,
+          contractAddress: collectibleAddress,
+          functionName: "addCollectible",
+          params: { _URI: url, price: utils.parseEther(price) },
         },
         onError: (error) => {},
         onSuccess: async (success) => {
           await success.wait(1);
-          updateMilestones();
+          updateCollectibles();
           setIsMinting(false);
           //   updateUI();
         },
@@ -186,14 +188,14 @@ export default function MilestoneNFT() {
             }}
             className="border border-white p-3 m-3 shadow-lg"
           >
-            <h4>Milestones</h4>
+            <h4>Collectibles</h4>
             <Row className="p-4 justify-content-center text-black">
               {isFetching ? (
                 <div className="justify-content-center">
                   <Loader />
                 </div>
-              ) : milestones.length > 0 ? (
-                milestones.map((tokenURIResponse) => {
+              ) : collectibles.length > 0 ? (
+                collectibles.map((tokenURIResponse) => {
                   return (
                     <Card
                       className="m-3 justify-content-center shadow-lg"
@@ -252,7 +254,7 @@ export default function MilestoneNFT() {
                     className="w-50"
                     src="/static/images/cat-img-2.svg"
                   ></img>
-                  <h3>You haven't setup Milestones NFT</h3>
+                  <h3>You haven't setup Collectible NFT</h3>
                   <br />
                 </div>
               )}
@@ -267,7 +269,7 @@ export default function MilestoneNFT() {
             }}
             className="vvd shadow-lg"
           >
-            <span>{isMinting ? "Minting..." : "Add Milestones"}</span>
+            <span>{isMinting ? "Minting..." : "Add Collectibles"}</span>
           </button>
         </span>
       </Container>
@@ -279,7 +281,7 @@ export default function MilestoneNFT() {
         className="text-black"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Create Milestone NFTs</Modal.Title>
+          <Modal.Title>Create Collectible NFTs</Modal.Title>
         </Modal.Header>
         <Modal.Body className="justify-content-center">
           <div className="justify-content-center ">
@@ -301,30 +303,9 @@ export default function MilestoneNFT() {
               }}
             />
             <br />
-            {/* Price and buy start */}
-            {/* <div className="mb-1 mt-2">
-              <label className="mb-2 font-bold">Sell the NFT</label>
-              <div className="text-xs text-gray-700 flex">
-                <label className="flex items-center mr-2">
-                  <input
-                    checked={onSale}
-                    onChange={({ target: { checked } }) => {
-                      // setOrder({
-                      //   ...order,
-                      //   price: checked ? order.price : eth.pricePerItem
-                      // })
-                      setOnSale(checked);
-                    }}
-                    type="checkbox"
-                    className="form-checkbox"
-                  />
-                </label>
-                <span>Tick to sell the NFT</span>
-              </div>
-            </div> */}
             <input
               //   disabled={!onSale}
-              placeholder="Milestone in Klay"
+              placeholder="Price in Klay"
               className="mt-2 border rounded p-4 w-100"
               type="text"
               name="price"
@@ -363,7 +344,7 @@ export default function MilestoneNFT() {
             disabled={isMinting || isUploading}
             variant="primary"
             onClick={async () => {
-              await createMilestone();
+              await createCollectibles();
               handleCloseModal();
             }}
           >
@@ -371,7 +352,7 @@ export default function MilestoneNFT() {
               ? "Creating.."
               : isUploading
               ? "Uploading.."
-              : "Create Milestone"}
+              : "Create Collectible"}
           </Button>
         </Modal.Footer>
       </Modal>

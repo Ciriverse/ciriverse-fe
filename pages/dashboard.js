@@ -2,9 +2,8 @@ import { Container, Row, Col, ListGroup } from "react-bootstrap";
 import Head from "next/head";
 // import Sidebar from "../components/Sidebar";
 // import MessageForm from "../components/MessageForm";
-import { useMoralis, useWeb3Contract } from "react-moralis";
+import { useMoralis, useWeb3Contract, useChain } from "react-moralis";
 import { ethers } from "ethers";
-import nftAbi from "../constants/MilestoneNFT.json";
 import milestoneAbi from "../constants/MilestoneNFTv2.json";
 import { useEffect, useState } from "react";
 import Mint from "../components/Mint";
@@ -13,9 +12,11 @@ import MilestoneNFT from "../components/MilestoneNFT";
 import { PlusCircle } from "react-bootstrap-icons";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Overlays from "../components/Overlays";
+import CollectibleNFT from "../components/CollectibleNFT";
+import Polling from "../components/Polling";
 
-const projectId = "2FAORjlGKnlM2unSmMNIsLKGnjX";
-const projectSecret = "7dfd99f8cf8a0583c9830a141c2bed1c";
+const projectId = process.env.NEXT_PUBLIC_IPFS_PROJECT_ID;
+const projectSecret = process.env.NEXT_PUBLIC_IPFS_PROJECT_SECRET;
 const authorization = "Basic " + btoa(projectId + ":" + projectSecret);
 
 const client = ipfsHttpClient({
@@ -27,6 +28,7 @@ const client = ipfsHttpClient({
 
 export default function Dashboard() {
   const { chainId, account, isWeb3Enabled } = useMoralis();
+  const { switchNetwork } = useChain();
   const chainString = "31337";
   const { runContractFunction } = useWeb3Contract();
   const milestoneAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
@@ -48,18 +50,16 @@ export default function Dashboard() {
 
   async function onUpload(e) {
     const file = e.target.files[0];
-    console.log("masuk sini");
+
     setUploading(true);
-    console.log(file);
+
     try {
       const added = await client.add(file, {
-        progress: (prog) => console.log(`received: ${prog}`),
+        progress: (prog) => {},
       });
       const url = `https://ipfs.io/ipfs/${added.path}`;
       setFileUrl(url);
-    } catch (error) {
-      console.log("Error uploading file:", error);
-    }
+    } catch (error) {}
     setUploading(false);
   }
 
@@ -76,23 +76,24 @@ export default function Dashboard() {
     abi: milestoneAbi,
     contractAddress: milestoneAddress,
     functionName: "isCreator",
-    // params: {
-    //   creator: account,
-    // },
+    params: {
+      _address: account,
+    },
   });
 
   async function updateUI() {
     let dataCreator = await isCreator();
-    console.log("Creator bukan");
-    console.log(dataCreator);
+
     setCreator(dataCreator);
   }
 
   useEffect(() => {
-    if (isWeb3Enabled) {
+    if (isWeb3Enabled && chainId == "0x3e9") {
       updateUI();
+    } else {
+      setCreator(false);
     }
-  }, [isWeb3Enabled, account]);
+  }, [isWeb3Enabled, account, chainId]);
 
   return (
     <section className="dashboard">
@@ -146,6 +147,16 @@ export default function Dashboard() {
             <span className="navbar-text">
               <button
                 onClick={() => {
+                  setPage("Polling");
+                }}
+                className="vvd shadow-lg w-50 mb-3"
+              >
+                <span>Polling</span>
+              </button>
+            </span>
+            <span className="navbar-text">
+              <button
+                onClick={() => {
                   setPage("Overlays");
                 }}
                 className="vvd shadow-lg w-50 mb-3"
@@ -155,26 +166,6 @@ export default function Dashboard() {
             </span>
           </Col>
           <Col md={8}>
-            {/* <MessageForm /> */}
-            {/* <button
-              onClick={() => {
-                runContractFunction({
-                  params: {
-                    abi: milestoneAbi,
-                    contractAddress: milestoneAddress,
-                    functionName: "creatorRegister",
-                    params: { name: "test2", pic: "test2" },
-                  },
-                  onError: (error) => console.log(error),
-                  onSuccess: (success) => {
-                    console.log(success);
-                    updateUI();
-                  },
-                });
-              }}
-            >
-              
-            </button> */}
             {creatorStatus ? (
               currentPage == "Overview" ? (
                 <Overview />
@@ -182,9 +173,19 @@ export default function Dashboard() {
                 <MilestoneNFT />
               ) : currentPage == "Overlays" ? (
                 <Overlays />
+              ) : currentPage == "Collectible NFTs" ? (
+                <CollectibleNFT />
+              ) : currentPage == "Polling" ? (
+                <Polling />
               ) : (
                 "Coming Soon"
               )
+            ) : chainId != "0x3e9" ? (
+              <span className=" navbar-text justify-content-center">
+                <button onClick={() => switchNetwork("0x3e9")}>
+                  Change to Klaytn Baobab{" "}
+                </button>
+              </span>
             ) : (
               <div className="text-center justify-content-center">
                 <br />
@@ -254,18 +255,13 @@ export default function Dashboard() {
                             _pic: `${fileUrl}`,
                           },
                         },
-                        onError: (error) => console.log(error),
+                        onError: (error) => {},
                         onSuccess: async (success) => {
                           await success.wait(1);
-                          console.log(success);
+
                           setRegistering(false);
                           updateUI();
                         },
-                        // onComplete: async (complete) => {
-                        //   await complete.wait(1);
-                        //   console.log("complete nih");
-                        //   updateUI();
-                        // },
                       });
                     }}
                   >

@@ -4,12 +4,11 @@ import "animate.css";
 import TrackVisibility from "react-on-screen";
 import { useState } from "react";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-import nftAbi from "../constants/MilestoneNFT.json";
 import milestoneMgmtAbi from "../constants/MilestoneNFTv2.json";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 
-const projectId = "2FAORjlGKnlM2unSmMNIsLKGnjX";
-const projectSecret = "7dfd99f8cf8a0583c9830a141c2bed1c";
+const projectId = process.env.NEXT_PUBLIC_IPFS_PROJECT_ID;
+const projectSecret = process.env.NEXT_PUBLIC_IPFS_PROJECT_SECRET;
 const authorization = "Basic " + btoa(projectId + ":" + projectSecret);
 
 const client = ipfsHttpClient({
@@ -40,16 +39,14 @@ export default function Mint() {
 
   async function onUpload(e) {
     const file = e.target.files[0];
-    console.log(file);
+
     try {
       const added = await client.add(file, {
-        progress: (prog) => console.log(`received: ${prog}`),
+        progress: (prog) => {},
       });
       const url = `https://infura-ipfs.io/ipfs/${added.path}`;
       setFileUrl(url);
-    } catch (error) {
-      console.log("Error uploading file:", error);
-    }
+    } catch (error) {}
   }
 
   return (
@@ -148,9 +145,8 @@ export default function Mint() {
                   functionName: "mintCreatorNFT",
                   params: { _tokenURI: fileUrl, _price: 10000 },
                 },
-                onError: (error) => console.log(error),
+                onError: (error) => {},
                 onSuccess: (success) => {
-                  console.log(success);
                   //   updateUI();
                 },
               });

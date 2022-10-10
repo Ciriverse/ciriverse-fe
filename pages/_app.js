@@ -11,7 +11,9 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   const showHeader =
-    router.pathname === "/notification" || router.pathname === "/qrlink"
+    router.pathname === "/notification" ||
+    router.pathname === "/qrlink" ||
+    router.pathname === "/polling"
       ? false
       : true;
 

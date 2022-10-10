@@ -473,6 +473,30 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "creatorAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "donator",
+        "type": "address"
+      }
+    ],
+    "name": "getVotesCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "account",
         "type": "address"
       },
@@ -494,7 +518,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
     "name": "isCreator",
     "outputs": [
       {
@@ -582,7 +612,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "artist",
+        "name": "creator",
         "type": "address"
       },
       {

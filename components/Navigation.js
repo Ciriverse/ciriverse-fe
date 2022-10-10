@@ -4,7 +4,7 @@ import { Nav, Navbar, Container, Button, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 // import { useSignMessage } from "wagmi";
 // moralis
-import { useMoralis } from "react-moralis";
+import { useMoralis, useChain } from "react-moralis";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -26,6 +26,8 @@ export default function Navigation() {
     deactivateWeb3,
   } = useMoralis();
 
+  const { switchNetwork } = useChain();
+
   useEffect(() => {
     if (
       !isWeb3Enabled &&
@@ -39,28 +41,28 @@ export default function Navigation() {
 
   useEffect(() => {
     Moralis.onAccountChanged((account) => {
-      console.log(`Account changed to ${account}`);
       if (account == null) {
         window.localStorage.removeItem("connected");
         deactivateWeb3();
-        console.log("Null Account found");
       }
     });
   }, []);
 
   useEffect(() => {
     if (account) {
+      // if (chainId != "0x3e9") {
+      //   switchNetwork("0x3e9");
+      // }
       const connectToMoralis = async () => {
         const userData = {
           address: account,
           chain: chainId,
           network: "evm",
         };
-        console.log(userData);
       };
       connectToMoralis();
     }
-  }, [account]);
+  }, [account, chainId]);
 
   async function handleLogout(e) {
     e.preventDefault();
@@ -195,7 +197,6 @@ export default function Navigation() {
                       window.localStorage.setItem("connected", "injected");
                       // window.localStorage.setItem("connected", "walletconnect")
                     }
-                    console.log(ret);
 
                     router.push("/dashboard");
                   }

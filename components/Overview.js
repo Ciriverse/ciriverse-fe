@@ -16,6 +16,7 @@ export default function Overview() {
   const [donatorsCount, setdonatorsCount] = useState("0");
   const [milestones, setMilestones] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [isWithdrawing, setWithdrawing] = useState(false);
 
   const milestoneAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const { runContractFunction: getFunds } = useWeb3Contract({
@@ -45,11 +46,23 @@ export default function Overview() {
     },
   });
 
+  const { runContractFunction: withdrawFund } = useWeb3Contract({
+    abi: milestoneAbi,
+    contractAddress: milestoneAddress,
+    functionName: "withdrawFunds",
+    onError: (error) => setWithdrawing(false),
+    onSuccess: async (success) => {
+      await success.wait(1);
+      updateMilestones();
+      setWithdrawing(false);
+      updateFunds();
+    },
+  });
+
   async function updateFunds() {
     let fundsData = await getFunds();
     fundsData = utils.formatUnits(fundsData, "ether");
-    console.log("get funds");
-    console.log(fundsData);
+
     setFunds(fundsData);
   }
 
@@ -62,20 +75,16 @@ export default function Overview() {
   async function updateMilestones() {
     setIsFetching(true);
     let milestonesData = await getMilestones();
-    console.log("get milesones");
 
     let dataAfter = [];
 
     await Promise.all(
       milestonesData.map(async (data, index) => {
         let tokenURIResponse = await (await fetch(data)).json();
-        console.log("nge fetch ga sih");
-        console.log(tokenURIResponse);
+
         dataAfter.push(tokenURIResponse);
       })
     );
-
-    console.log(dataAfter);
 
     setMilestones(dataAfter);
     setIsFetching(false);
@@ -118,12 +127,14 @@ export default function Overview() {
             <h2 className="pb-2">{funds} Klay</h2>
             <span className=" navbar-text justify-content-center">
               <button
-                // onClick={() => {
-                //   setPage("Overlays");
-                // }}
+                disabled={isWithdrawing}
+                onClick={async () => {
+                  setWithdrawing(true);
+                  await withdrawFund();
+                }}
                 className="vvd shadow-md"
               >
-                <span>Withdraw</span>
+                <span>{isWithdrawing ? "Withdrawing.." : "Withdraw"}</span>
               </button>
             </span>
           </Col>

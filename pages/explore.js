@@ -1,21 +1,22 @@
 import { Container, Row, Col, ListGroup } from "react-bootstrap";
 // import Sidebar from "../components/Sidebar";
 // import MessageForm from "../components/MessageForm";
-import { useMoralis, useWeb3Contract } from "react-moralis";
+import { useMoralis, useWeb3Contract, useChain } from "react-moralis";
 import { utils } from "ethers";
-import nftAbi from "../constants/MilestoneNFT.json";
+
 import milestoneAbi from "../constants/MilestoneNFTv2.json";
 import { useEffect, useState } from "react";
 import Mint from "../components/Mint";
 import Overview from "../components/Overview";
-import MilestoneNFT from "../components/MilestoneNFT";
+
 import io from "Socket.io-client";
 import Users from "../components/users";
 import Head from "next/head";
+import { chain } from "wagmi";
 
 export default function Explore() {
   const { chainId, account, isWeb3Enabled } = useMoralis();
-  const chainString = "31337";
+  const { switchNetwork } = useChain();
   const { runContractFunction } = useWeb3Contract();
   const milestoneAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const [data, setData] = useState([]);
@@ -43,8 +44,6 @@ export default function Explore() {
 
   async function updateUI() {
     let dataCreator = await isCreator();
-    console.log("Creator bukan");
-    console.log(dataCreator);
     setCreator(dataCreator);
   }
 
@@ -57,10 +56,10 @@ export default function Explore() {
   // }
 
   useEffect(() => {
-    if (isWeb3Enabled) {
+    if (isWeb3Enabled && chainId == "0x3e9") {
       updateUI();
     }
-  }, [isWeb3Enabled, account]);
+  }, [isWeb3Enabled, account, chainId]);
 
   return (
     <section className="dashboard">
@@ -71,7 +70,16 @@ export default function Explore() {
       <Container fluid>
         <Row>
           <Col>
-            <Users />
+            {" "}
+            {chainId == "0x3e9" ? (
+              <Users />
+            ) : (
+              <span className=" navbar-text justify-content-center">
+                <button onClick={() => switchNetwork("0x3e9")}>
+                  Change to Klaytn Baobab{" "}
+                </button>
+              </span>
+            )}
           </Col>
         </Row>
       </Container>

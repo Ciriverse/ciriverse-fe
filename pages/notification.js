@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 export default function Notification() {
   const router = useRouter();
-  console.log(router.query);
+
   // let { addr } = router.query;
   const [play] = useSound("/static/sound/money.mp3");
   const [message, setMessage] = useState("Empty");
@@ -17,28 +17,22 @@ export default function Notification() {
     if (router.isReady) {
       const { addr, mint } = router.query;
       const socketInitializer = async () => {
-        socket.on("connect", () => {
-          console.log(`connected`);
-        });
+        socket.on("connect", () => {});
 
         socket.emit("join-room", `${addr}`);
 
         if (mint == "true") {
           socket.off("receive-nft").on("receive-nft", (notifMessages) => {
-            console.log(notifMessages);
-            console.log(addr);
             showNotif(notifMessages);
             play();
           });
-          socket.emit("sending-nft", `${addr}`, "hallooooo nft");
+          socket.emit("sending-nft", `${addr}`, "Initial Setup NFTs");
         } else {
           socket.off("receive-donate").on("receive-donate", (notifMessages) => {
-            console.log(notifMessages);
-            console.log(addr);
             showNotif(notifMessages);
             play();
           });
-          socket.emit("sending-donate", `${addr}`, "hallooooo");
+          socket.emit("sending-donate", `${addr}`, "Initial Setup Donate");
         }
       };
       socketInitializer();

@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import CreatorView from "../../components/CreatorView";
 import Head from "next/head";
+import { useChain } from "react-moralis";
 
 export default function Creator() {
   const router = useRouter();
   const { addr } = router.query;
+  const { switchNetwork, chainId } = useChain();
 
   useEffect(() => {
     if (addr) {
@@ -22,7 +24,15 @@ export default function Creator() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div>
-        <CreatorView address={addr} />
+        {chainId == "0x3e9" ? (
+          <CreatorView address={addr} />
+        ) : (
+          <span className=" navbar-text justify-content-center">
+            <button onClick={() => switchNetwork("0x3e9")}>
+              Change to Klaytn Baobab{" "}
+            </button>
+          </span>
+        )}
       </div>
     </section>
   );

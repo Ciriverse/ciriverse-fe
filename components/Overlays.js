@@ -49,8 +49,7 @@ export default function Overlays() {
   async function updateFunds() {
     let fundsData = await getFunds();
     fundsData = utils.formatUnits(fundsData, "ether");
-    console.log("get funds");
-    console.log(fundsData);
+
     setFunds(fundsData);
   }
 
@@ -63,20 +62,16 @@ export default function Overlays() {
   async function updateMilestones() {
     setIsFetching(true);
     let milestonesData = await getMilestones();
-    console.log("get milesones");
 
     let dataAfter = [];
 
     await Promise.all(
       milestonesData.map(async (data, index) => {
         let tokenURIResponse = await (await fetch(data)).json();
-        console.log("nge fetch ga sih");
-        console.log(tokenURIResponse);
+
         dataAfter.push(tokenURIResponse);
       })
     );
-
-    console.log(dataAfter);
 
     setMilestones(dataAfter);
     setIsFetching(false);
