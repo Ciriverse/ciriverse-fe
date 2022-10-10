@@ -428,7 +428,7 @@ export default function CreatorView({ address }) {
                                     } else {
                                       // OPENSEA
                                       window.open(
-                                        `https://testnets.opensea.io/collection/ciriverse-v2`,
+                                        `https://testnets.opensea.io/collection/ciriverse-jfodnapiqk`,
                                         "_blank"
                                       );
                                     }

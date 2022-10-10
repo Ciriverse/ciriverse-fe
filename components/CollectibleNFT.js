@@ -227,7 +227,7 @@ export default function CollectibleNFT() {
                           <Button
                             onClick={() =>
                               window.open(
-                                `https://testnets.opensea.io/collection/ciriverse-v2`,
+                                `https://baobab.scope.klaytn.com/account/0x01Ebab7B1D0Ae2064311E7054844CE5c8dB96d96?tabId=txList`,
                                 "_blank"
                               )
                             }

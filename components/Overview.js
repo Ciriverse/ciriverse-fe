@@ -197,7 +197,7 @@ export default function Overview() {
                           <Button
                             onClick={() =>
                               window.open(
-                                `https://testnets.opensea.io/collection/ciriverse-v2`,
+                                `https://testnets.opensea.io/collection/ciriverse-jfodnapiqk`,
                                 "_blank"
                               )
                             }
