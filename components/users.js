@@ -105,9 +105,10 @@ export default function Users() {
                   <Loader />
                 </div>
               ) : milestones.length > 0 ? (
-                milestones.map((user) => {
+                milestones.map((user, i) => {
                   return (
                     <Card
+                      key={i}
                       onClick={() => {
                         router.push(`/creator/${user.addr}`);
                       }}
