@@ -12,7 +12,7 @@ export default function Notification() {
   const [play] = useSound("/static/sound/money.mp3");
   const [message, setMessage] = useState("Empty");
   const [showMessage, setShow] = useState(false);
-  socket = io("http://localhost:5001");
+  socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
   useEffect(() => {
     if (router.isReady) {
       const { addr, mint } = router.query;

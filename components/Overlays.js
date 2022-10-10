@@ -111,12 +111,12 @@ export default function Overlays() {
             className="border border-white p-3 m-3 shadow-lg"
           >
             <h4 className="pb-2">Donate Overlay</h4>
-            <p className="pb-2">{`http://localhost:3000/notification?addr=${account}&mint=false`}</p>
+            <p className="pb-2">{`https://ciriverse.xyz/notification?addr=${account}&mint=false`}</p>
             <span className=" navbar-text justify-content-center">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `http://localhost:3000/notification?addr=${account}&mint=false`
+                    `https://ciriverse.xyz/notification?addr=${account}&mint=false`
                   );
                 }}
                 className="vvd shadow-md"
@@ -136,12 +136,12 @@ export default function Overlays() {
             className="border border-white p-3 m-3 shadow-lg"
           >
             <h4 className="pb-2">Milestone NFT Mint Overlay</h4>
-            <p className="pb-2">{`http://localhost:3000/notification?addr=${account}&mint=true`}</p>
+            <p className="pb-2">{`https://ciriverse.xyz/notification?addr=${account}&mint=true`}</p>
             <span className=" navbar-text justify-content-center">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `http://localhost:3000/notification?addr=${account}&mint=true`
+                    `https://ciriverse.xyz/notification?addr=${account}&mint=true`
                   );
                 }}
                 className="vvd shadow-md"
@@ -173,7 +173,7 @@ export default function Overlays() {
               <QRCode
                 size={256}
                 style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                value={`http://localhost:3000/creator/${account}`}
+                value={`https://ciriverse.xyz/creator/${account}`}
                 viewBox={`0 0 256 256`}
               />
             </div>
@@ -183,7 +183,7 @@ export default function Overlays() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `http://localhost:3000/qrlink?addr=${account}`
+                    `https://ciriverse.xyz/qrlink?addr=${account}`
                   );
                 }}
                 className="vvd shadow-md"

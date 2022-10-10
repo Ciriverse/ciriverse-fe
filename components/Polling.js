@@ -195,7 +195,7 @@ export default function Polling() {
                         <Button
                           onClick={() => {
                             navigator.clipboard.writeText(
-                              `http://localhost:3000/polling?addr=${account}&id=${i}`
+                              `https://ciriverse.xyz/polling?addr=${account}&id=${i}`
                             );
                           }}
                           variant="outline-primary"

@@ -40,7 +40,7 @@ export default function QRLink() {
                 <QRCode
                   size={256}
                   style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  value={`http://localhost:3000/creator/${addr}`}
+                  value={`https://ciriverse.xyz/creator/${addr}`}
                   viewBox={`0 0 256 256`}
                 />
               </div>
