@@ -2,7 +2,7 @@
 
 ![ Ciriverse Banner](https://i.ibb.co/VNgVKnv/Cover.png)
 
-** Ciriverse Architecture**
+**Ciriverse Architecture**
 
 ![ Ciriverse Architecture](https://i.ibb.co/WWtG0vj/Ciriverse-Architecture.png)
 
