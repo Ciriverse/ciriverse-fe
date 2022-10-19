@@ -1,4 +1,10 @@
-## Ciriverse Front-end
+## Ciriverse Front-End
+
+![ Ciriverse Banner](https://i.ibb.co/VNgVKnv/Cover.png)
+
+** Ciriverse Architecture**
+
+![ Ciriverse Architecture](https://i.ibb.co/WWtG0vj/Ciriverse-Architecture.png)
 
 First, run install dependencies the development server:
 
@@ -12,8 +18,8 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Deploy on Vercel
+## Live Website
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[Website](https://www.ciriverse.xyz/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Pitch Deck](https://drive.google.com/file/d/18VjEDSS1y-6C11xNri4OFS7yWj61ot1N/view?usp=sharing)
