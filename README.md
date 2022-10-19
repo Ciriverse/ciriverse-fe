@@ -1,7 +1,5 @@
 ## Ciriverse Front-End
 
-![ Ciriverse Banner](https://i.ibb.co/VNgVKnv/Cover.png)
-
 **Ciriverse Architecture**
 
 ![ Ciriverse Architecture](https://i.ibb.co/WWtG0vj/Ciriverse-Architecture.png)
@@ -21,5 +19,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Live Website
 
 [Website](https://www.ciriverse.xyz/)
+
+![ Ciriverse Banner](https://i.ibb.co/VNgVKnv/Cover.png)
 
 [Pitch Deck](https://drive.google.com/file/d/18VjEDSS1y-6C11xNri4OFS7yWj61ot1N/view?usp=sharing)
